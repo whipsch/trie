@@ -611,14 +611,18 @@ impl<'a> IntoIterator for &'a Set {
 
 #[cfg(test)]
 mod test {
-    use std::usize;
+    // FIXME: usize::BITS (see #27753)
+    #[cfg(target_pointer_width = "64")]
+    const USIZE_BITS: usize = 64;
+    #[cfg(target_pointer_width = "32")]
+    const USIZE_BITS: usize = 32;
 
     use super::Set;
 
     #[test]
     fn test_sane_chunk() {
         let x = 1;
-        let y = 1 << (usize::BITS - 1);
+        let y = 1 << (USIZE_BITS - 1);
 
         let mut trie = Set::new();
 
